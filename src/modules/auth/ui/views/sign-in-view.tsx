@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { FaGithub, FaGoogle} from "react-icons/fa"
 
 
 
@@ -43,6 +44,7 @@ export const SignInView = () => {
             {
                 email:data.email,
                 password: data.password,
+                callbackURL:"/"
             },
             {
              onSuccess: ()=>{
@@ -50,6 +52,29 @@ export const SignInView = () => {
                 setPending(false)
              },
              onError: ({error})=>{
+                setPending(false);
+                setError(error.message)
+             }
+
+            }
+        )
+    }
+    const onSocial =(provider: "github" | "google")=>{
+        setError(null)
+        setPending(true)
+
+        authClient.signIn.social(
+            {
+              provider,
+              callbackURL:"/"
+            },
+            {
+             onSuccess: ()=>{
+                setPending(false)
+                
+             },
+             onError: ({error})=>{
+                setPending(false)
                 setError(error.message)
              }
 
@@ -79,6 +104,7 @@ export const SignInView = () => {
                                     name="email"
                                     render={({field})=>(
                                         <FormItem>
+                                            <FormLabel>Email</FormLabel>
                                             <FormControl>
                                                 <Input type='email' placeholder='m@example.com' {...field}/>
                                             </FormControl>
@@ -92,6 +118,9 @@ export const SignInView = () => {
                                     name="password"
                                     render={({field})=>(
                                         <FormItem>
+                                             <FormLabel>
+                                                Password
+                                                </FormLabel>
                                             <FormControl>
                                                 <Input type='password' placeholder='********' {...field}/>
                                             </FormControl>
@@ -117,12 +146,18 @@ export const SignInView = () => {
                                 </div>
 
                                 <div className='grid grid-cols-2 gap-4'>
-                                    <Button className='w-full' variant="outline" 
-                                    disabled={pending} type='button'>
-                                        GitHub
+                                    <Button 
+                                    className='w-full' 
+                                    variant="outline" 
+                                    disabled={pending}
+                                    onClick={()=>onSocial("github")}
+                                     type='button'>
+                                       <FaGithub/>
                                     </Button>
-                                    <Button className='w-full' variant="outline" disabled={pending} type='button'>
-                                        Google
+                                    <Button className='w-full' 
+                                     onClick={()=>onSocial("google")}
+                                    variant="outline" disabled={pending} type='button'>
+                                        <FaGoogle/>
                                     </Button>
 
                                 </div>

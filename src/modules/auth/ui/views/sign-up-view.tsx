@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { FaGithub, FaGoogle} from "react-icons/fa"
 
 
 
@@ -53,6 +54,7 @@ export const SignUpView = () => {
                 name:data.name,
                 email:data.email,
                 password: data.password,
+                callbackURL:"/"
             },
             {
              onSuccess: ()=>{
@@ -60,12 +62,35 @@ export const SignUpView = () => {
                 setPending(false)
              },
              onError: ({error})=>{
+                setPending(false)
                 setError(error.message)
              }
 
             }
         )
     }
+
+     const onSocial =(provider: "github" | "google")=>{
+            setError(null)
+            setPending(true)
+    
+            authClient.signIn.social(
+                {
+                  provider,
+                  callbackURL:"/"
+                },
+                {
+                 onSuccess: ()=>{
+                    setPending(false)
+                 },
+                 onError: ({error})=>{
+                    setPending(false)
+                    setError(error.message)
+                 }
+    
+                }
+            )
+        }
     
     return (
 
@@ -164,11 +189,15 @@ export const SignUpView = () => {
 
                                 <div className='grid grid-cols-2 gap-4'>
                                     <Button className='w-full' variant="outline" 
-                                    disabled={pending} type='button'>
-                                        GitHub
+                                    onClick={()=>onSocial("github")}
+                                    disabled={pending} 
+                                    type='button'>
+                                        <FaGithub/>
                                     </Button>
-                                    <Button className='w-full' variant="outline" disabled={pending} type='button'>
-                                        Google
+                                    <Button className='w-full' variant="outline" 
+                                     onClick={()=>onSocial("google")}
+                                    disabled={pending} type='button'>
+                                       <FaGoogle/>
                                     </Button>
 
                                 </div>

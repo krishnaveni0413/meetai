@@ -1,6 +1,7 @@
 "use client";
 
 import { ErrorState } from "@/components/error-state";
+
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
@@ -11,6 +12,7 @@ export const AgentsView =()=>{
     
     return (
         <div>
+            
             {JSON.stringify(data, null, 2)}
         </div>
     )

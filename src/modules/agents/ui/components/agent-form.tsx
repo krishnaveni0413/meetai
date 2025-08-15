@@ -34,22 +34,41 @@ export const AgentForm = ({
 }: AgentFormProps) => {
     const trpc = useTRPC();
     // const router =useRouter()
-    const queryClient =useQueryClient();
+    const queryClient = useQueryClient();
 
     const createAgent = useMutation(
         trpc.agents.create.mutationOptions({
-            onSuccess: async () => { 
+            onSuccess: async () => {
                 await queryClient.invalidateQueries(
-                    trpc.agents.getMany.queryOptions({ }),
+                    trpc.agents.getMany.queryOptions({}),
                 );
-                if(initaialValue?.id) {
+                if (initaialValue?.id) {
                     await queryClient.invalidateQueries(
-                        trpc.agents.getOne.queryOptions({id:initaialValue.id})
+                        trpc.agents.getOne.queryOptions({ id: initaialValue.id })
                     )
                 }
                 onSuccess?.();
             },
-            onError: (error) => { 
+            onError: (error) => {
+                toast.error(error.message)
+                //TODO Check if error code is "FORBIDEN", redirect to"/upgrade"
+            },
+        })
+    )
+    const UpdateAgent = useMutation(
+        trpc.agents.update.mutationOptions({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries(
+                    trpc.agents.getMany.queryOptions({}),
+                );
+                if (initaialValue?.id) {
+                    await queryClient.invalidateQueries(
+                        trpc.agents.getOne.queryOptions({ id: initaialValue.id })
+                    )
+                }
+                onSuccess?.();
+            },
+            onError: (error) => {
                 toast.error(error.message)
                 //TODO Check if error code is "FORBIDEN", redirect to"/upgrade"
             },
@@ -63,11 +82,11 @@ export const AgentForm = ({
         }
     })
     const isEdit = !!initaialValue?.id;
-    const isPending = createAgent.isPending;
+    const isPending = createAgent.isPending || UpdateAgent.isPending;
 
     const onSubmit = (values: z.infer<typeof agentInsertSchema>) => {
         if (isEdit) {
-            console.log("TODO: updateAgent")
+            UpdateAgent.mutate({...values, id:initaialValue.id})
         }
         else {
             createAgent.mutate(values);
@@ -91,7 +110,7 @@ export const AgentForm = ({
                             <FormControl>
                                 <Input {...field} placeholder="e.g. Math Tutor" />
                             </FormControl>
-                            <FormMessage/>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -104,17 +123,17 @@ export const AgentForm = ({
                             <FormControl>
                                 <Textarea {...field} placeholder="You are a helpfull math assistant that can answer questions and help with assignment." />
                             </FormControl>
-                            <FormMessage/>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
                 <div className="flex justify-between gap-x-2">
                     {onCancle && (
                         <Button
-                        variant="ghost"
-                        disabled={isPending}
-                        type="button"
-                        onClick={()=>onCancle()}
+                            variant="ghost"
+                            disabled={isPending}
+                            type="button"
+                            onClick={() => onCancle()}
                         >Cancle
                         </Button>
                     )}

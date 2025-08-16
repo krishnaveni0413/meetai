@@ -5,10 +5,48 @@ import { meetings } from "@/db/schema";
 import { and, desc, eq, getTableColumns, ilike, sql, count } from "drizzle-orm"
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, MIN_PAGE_SIZE, } from "@/constants";
 import { TRPCError } from "@trpc/server";
+import { meetingsInsertSchema, meetingsUpdateShema } from "../schema";
 
 
 
 export const meetingsRouters = createTRPCRouter({
+     update:protectedProcedure
+        .input(meetingsUpdateShema)
+        .mutation(async ({ctx, input})=>{
+            const [updatedmeetings] =await db
+            .update(meetings)
+            .set(input)
+            .where(
+                and(
+                    eq(meetings.id, input.id),
+                    eq(meetings.userId, ctx.auth.user.id),
+                )
+            )
+            .returning();
+    
+             if(!updatedmeetings){
+                throw new TRPCError({
+                    code:"NOT_FOUND",
+                    message:"Meeting not found",
+                })
+            }
+            return updatedmeetings
+    
+        }),
+
+      create: protectedProcedure
+            .input(meetingsInsertSchema)
+            .mutation(async ({ input, ctx }) => {
+                const [createdmeeting] = await db
+                    .insert(meetings)
+                    .values({
+                        ...input,
+                    userId: ctx.auth.user.id,
+                    })
+                    .returning();
+    //todo:ctraet strem call upset users
+                return createdmeeting;
+        }),
     
     getOne: protectedProcedure
     .input(z.object({ id: z.string() }))

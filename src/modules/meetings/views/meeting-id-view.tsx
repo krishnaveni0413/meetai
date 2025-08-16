@@ -9,6 +9,10 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 import { useRouter } from "next/navigation"
 import { UpdateMeetingDialog } from "../server/ui/components/update-meeting-dialog"
 import { useState } from "react"
+import { UpcomingState } from "../server/ui/components/upcoming-state"
+import { ActiveState } from "../server/ui/components/active-state"
+import { CancelledState } from "../server/ui/components/cancelled-state"
+import { ProcessingState } from "../server/ui/components/processing-state"
 
 interface Props {
     meetingId: string,
@@ -44,6 +48,12 @@ export const MeetingIdView =({meetingId }:Props)=>{
         await removeMeeting.mutateAsync({id:meetingId})
     }
 
+    const isActive = data.status==="active";
+    const isUpcoming = data.status==="upcoming"
+    const isCancelled = data.status==="cancelled"
+    const isCompleted = data.status==="completed"
+    const isProcessing = data.status==="processing"
+
 
     return (
         <>
@@ -58,8 +68,18 @@ export const MeetingIdView =({meetingId }:Props)=>{
                 meetingId={meetingId}
                 meetingName={data.name}
                 onEdit={()=>setUpdateMeetingDialogOpen(true)}
-                onRemove={handleRemoveMeeting}/>
-                {JSON.stringify(data, null,2)}
+                onRemove={handleRemoveMeeting}
+                />
+                {isCancelled && <CancelledState/>}
+                {isProcessing && <ProcessingState/>}
+                {isCompleted && <div>Completed</div>}
+                {isActive && <ActiveState meetingId={meetingId}/>}
+                {isUpcoming && <UpcomingState
+                    meetingId="={meetingId}"
+                    onCancleMeeting={()=>{}}
+                    isCancelling={false}
+                />}
+                
             </div>
         </>
     )

@@ -10,8 +10,10 @@ export const MeetingsView=()=>{
     const {data} =useQuery(trpc.meetings.getMany.queryOptions({}))
 
     return (
-        <div>
-            {JSON.stringify(data)}
+        <div className="overflow-x-scroll">
+           {/* {JSON.stringify(data)} */}
+          
+
         </div>
     )
 }

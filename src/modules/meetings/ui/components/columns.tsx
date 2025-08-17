@@ -15,8 +15,8 @@ import {
     ClockArrowUpIcon
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { VideoIcon } from "lucide-react"
-import { MeetingGetMany } from "@/modules/meetings/types"
+import { MeetingGetMany } from "../types"
+// import { MeetingGetMany } from "@/modules/meetings/server/ui/types"
 import { cn } from "@/lib/utils"
 
 function formatDuration(seconds: number) {

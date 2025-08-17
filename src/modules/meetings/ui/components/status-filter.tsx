@@ -8,7 +8,8 @@ import {
 
 import { CommandSelect
  } from "@/components/command-select";
- import { MeetingStatus } from "@/modules/meetings/types";
+//  import { MeetingStatus } from "../types";
+ import { MeetingStatus } from "@/modules/meetings/ui/types";
  import { useMeetingsFilters } from "@/modules/meetings/hooks/use-meetings-filters";
 
 

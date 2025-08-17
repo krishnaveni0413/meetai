@@ -1,9 +1,9 @@
-import { MeetingsView, MeetingViewError, MeetingViewLoading } from "@/modules/meetings/views/meetings-view";
+import { MeetingsView, MeetingViewError, MeetingViewLoading } from "@/modules/meetings/ui/views/meetings-view";
 import { getQueryClient, trpc } from "@/trpc/server"
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
-import { MeetingListHeader } from "@/modules/meetings/server/ui/components/meetings-list-header";
+import { MeetingListHeader } from "@/modules/meetings/ui/components/meetings-list-header";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";

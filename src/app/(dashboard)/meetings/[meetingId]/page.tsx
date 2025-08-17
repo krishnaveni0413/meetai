@@ -9,7 +9,7 @@ import {
      MeetingIdView,
      MeetingIdViewError, 
      MeetingIdViewLoding } 
-from "@/modules/meetings/views/meeting-id-view";
+from "@/modules/meetings/ui/views/meeting-id-view";
 
 interface Props {
     params: Promise<{

@@ -1,6 +1,7 @@
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { MeetingsForm } from "./meeting-form";
-import { MeetingGetOne } from "@/modules/meetings/types";
+// import { MeetingGetOne } from "../types";
+import { MeetingGetOne } from "@/modules/meetings/ui/types";
 
 
 interface UpdateMeetingDialogprops {

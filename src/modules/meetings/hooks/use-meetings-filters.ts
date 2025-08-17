@@ -1,7 +1,8 @@
 import { DEFAULT_PAGE } from "@/constants"
 import {parseAsInteger, parseAsString, useQueryStates, parseAsStringEnum } from "nuqs"
 
-import { MeetingStatus } from "../types"
+import { MeetingStatus } from "../ui/types"
+
 
 export const useMeetingsFilters =() =>{
     return useQueryStates({

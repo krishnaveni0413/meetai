@@ -91,7 +91,7 @@ export const meetingsRouters = createTRPCRouter({
                     userId: ctx.auth.user.id,
                 })
                 .returning();
-            //todo:ctraet strem call upset users
+         
             const call = streamVidio.video.call("default", createdmeeting.id);
             await call.create({
                 data: {
